@@ -12,6 +12,7 @@ run "Feature-Verifizierung"    bash    checks/check_features.sh
 run "Safety / Security"        python3 checks/safety_check.py
 run "WCAG-Kontrast"            python3 checks/contrast_check.py
 run "Performance / Größe"      python3 checks/perf_check.py
+run "nginx im Container"      bash    checks/nginx_check.sh
 if [ "$1" = "--ui" ]; then run "Browser-Test (Playwright)" python3 tests/ui_test.py; fi
 echo ""; echo "############################################################"
 [ "$rc" -eq 0 ] && echo "# GESAMT: alles bestanden ✓" || echo "# GESAMT: mindestens ein Check meldet Befunde (siehe oben)"

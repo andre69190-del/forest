@@ -1,5 +1,10 @@
 # Änderungsprotokoll
 
+## 0.2.2 – 09.11.2026 (Hotfix)
+- 0.2.1 hatte mit `types { … }` die komplette nginx-Dateityp-Liste ersetzt → Live-Seite wurde als Download ausgeliefert (ca. 18:29–Fix)
+- Lösung: eigene location für .webmanifest mit default_type
+- Neuer Check `checks/nginx_check.sh`: startet die echte nginx-Config in nginx:alpine und prüft Dateitypen, Header, 404
+
 ## 0.2.1 – 09.11.2026
 - Live-Fehler behoben: Flächen-Pass mit Foto wurde von der CSP blockiert (connect-src erlaubt jetzt blob:/data: für jsPDF)
 - nginx liefert manifest.webmanifest mit richtigem Typ (application/manifest+json)
