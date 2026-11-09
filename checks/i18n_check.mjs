@@ -33,7 +33,7 @@ const code = walk(join(ROOT, 'src')).filter((p) => /\.(jsx?|mjs)$/.test(p) && !p
 const used = new Set();
 for (const p of code) for (const m of readFileSync(p, 'utf8').matchAll(/\bt\(\s*'([^']+)'/g)) used.add(m[1]);
 // Schlüssel, die als Liste im Code stehen (['about.text1', …])
-for (const p of code) for (const m of readFileSync(p, 'utf8').matchAll(/'((?:about|capture|home)\.[a-z0-9.]+)'/g)) used.add(m[1]);
+for (const p of code) for (const m of readFileSync(p, 'utf8').matchAll(/'((?:about|capture|home|info)\.[a-zA-Z0-9.]+)'/g)) used.add(m[1]);
 
 const { TREM_FORMS, TREM_GROUPS, PROFILES, DECAY_CLASSES } = await import(join(ROOT, 'src', 'lib', 'forestry.js'));
 const dyn = [
@@ -45,6 +45,11 @@ const dyn = [
   ...['too_few_points', 'self_intersection', 'duplicate_after_rounding', 'collinear', 'out_of_range'].map((k) => `plot.issue.${k}`),
   ...['walk', 'map'].map((k) => `plot.mode.${k}`), ...['line', 'standing'].map((k) => `dw.mode.${k}`),
   ...['A', 'B', 'C', 'unknown'].map((k) => `ev.level.${k}`),
+  ...['done', 'next', 'later'].map((k) => `plan.status.${k}`),
+  ...Object.entries({ '1a': ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang'], '1b': ['trems47', 'species', 'monitoring', 'qr', 'sync', 'backup'],
+    '1c': ['native', 'attest', 'timestamp', 'store'], 2: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'],
+    3: ['satellite', 'inventory', 'soil', 'tropics', 'lang2'], 4: ['citizen', 'dashboard', 'gbif', 'lang3'] })
+    .flatMap(([ph, items]) => [`plan.p${ph}.title`, ...items.map((i) => `plan.p${ph}.${i}`)]),
   ...['plot', 'habitat_tree', 'deadwood_line', 'deadwood_standing', 'visit'].map((k) => `ev.kind.${k}`),
   ...['hash_mismatch', 'signature_invalid', 'media_changed', 'media_missing', 'chain_break'].map((k) => `ev.problem.${k}`),
   ...['low_gps_accuracy', 'no_position', 'position_stale', 'photo_blurry', 'future_time', 'bad_time', 'bad_position'].map((k) => `ev.warn.${k}`),

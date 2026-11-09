@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useI18n, LANGUAGES } from '../i18n/i18n.jsx';
 import { PROFILES } from '../lib/forestry.js';
-import { getDeviceKey, APP_VERSION } from '../lib/evidence.js';
+import { getDeviceKey, APP_VERSION, wipeAllLocalData } from '../lib/evidence.js';
 import { useSettings } from '../App.jsx';
 import { Card, Field, PageHeader } from '../components/ui.jsx';
 
@@ -30,11 +30,20 @@ export default function More() {
         <p className="muted">{t('set.device')}: <code>{keyId}</code> · v{APP_VERSION}</p>
       </Card>
       <ul className="list">
+        <li><Link className="list-item" to="/info"><strong>{t('home.info')}</strong></Link></li>
+        <li><Link className="list-item" to="/geplant"><strong>{t('plan.title')}</strong></Link></li>
         <li><Link className="list-item" to="/pruefen"><strong>{t('more.audit')}</strong></Link></li>
         <li><a className="list-item" href="impressum.html"><strong>{t('more.legal')}</strong></a></li>
       </ul>
       <Card title={t('more.about')}>
         {['about.text1', 'about.text2', 'about.text3', 'about.text4'].map((k) => <p key={k}>{t(k)}</p>)}
+      </Card>
+      <Card title={t('wipe.title')}>
+        <p className="muted">{t('wipe.text')}</p>
+        <button type="button" className="btn btn-danger" onClick={async () => {
+          if (window.prompt(t('wipe.confirm')) !== t('wipe.word')) return;
+          await wipeAllLocalData(); window.location.hash = '#/'; window.location.reload();
+        }}>{t('wipe.button')}</button>
       </Card>
     </div>
   );

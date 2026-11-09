@@ -5,7 +5,7 @@
 import { db } from './db.js';
 import { createDeviceKey, signRecord, verifyRecord, verifyChain, trustLevel, plausibility, sha256Hex, GENESIS, importPublicJwk } from './trust.js';
 
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 let keyPromise = null;
 /** Geräte-Schlüssel laden oder einmalig erzeugen. */
@@ -137,4 +137,10 @@ export function base64ToBytes(b64) {
 export function latestOnly(records) {
   const superseded = new Set(records.map((r) => r.supersedes).filter(Boolean));
   return records.filter((r) => !superseded.has(r.id));
+}
+
+/** Löscht ALLE lokalen Daten inkl. Geräte-Schlüssel (danach beginnt eine neue Kette). */
+export async function wipeAllLocalData() {
+  await Promise.all([db.records.clear(), db.media.clear(), db.keys.clear(), db.settings.clear()]);
+  keyPromise = null;
 }

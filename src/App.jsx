@@ -13,6 +13,8 @@ import Visit from './pages/Visit.jsx';
 import Evidence from './pages/Evidence.jsx';
 import Audit from './pages/Audit.jsx';
 import More from './pages/More.jsx';
+import Info from './pages/Info.jsx';
+import Plan from './pages/Plan.jsx';
 
 const DEFAULTS = { profile: 'INT', producerName: '', producerCountry: '' };
 const SettingsContext = createContext({ ...DEFAULTS, update: () => {} });
@@ -66,6 +68,8 @@ export default function App() {
               <Route path="/nachweise" element={<Evidence />} />
               <Route path="/pruefen" element={<Audit />} />
               <Route path="/mehr" element={<More />} />
+              <Route path="/info" element={<Info />} />
+              <Route path="/geplant" element={<Plan />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

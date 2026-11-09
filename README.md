@@ -5,7 +5,7 @@ Mikrohabitaten, Totholz, Feldbesuche. **Jeder Nachweis wird auf dem Gerät signi
 Änderung fällt auf, und jeder kann es selbst nachprüfen (auch ein Auditor, ohne Server).
 
 Hobby- und Pilotprojekt von arndt-software. Nicht von PEFC herausgegeben oder anerkannt.
-Live: https://forest.arndt-software.de · Konzept: docs/KONZEPT.md
+Live: https://forest.arndt-software.de · Beschreibung: docs/APP_BESCHREIBUNG.md · Konzept: docs/KONZEPT.md
 
 ## Schnellstart
 

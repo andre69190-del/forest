@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useI18n } from '../i18n/i18n.jsx';
-import { db } from '../lib/db.js';
+import { db, setSetting } from '../lib/db.js';
 import { verifyAll, exportBundle } from '../lib/evidence.js';
 import { Card, Notice, PageHeader, TrustBadge, downloadBlob } from '../components/ui.jsx';
 
@@ -15,6 +15,7 @@ export default function Evidence() {
   const bundle = async () => {
     const b = await exportBundle();
     downloadBlob(new Blob([JSON.stringify(b)], { type: 'application/json' }), `Pruefpaket_${b.device.keyId}_${b.exportedAt.slice(0, 10)}.json`);
+    await setSetting('lastBackup', b.exportedAt);
   };
 
   return (

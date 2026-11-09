@@ -1,13 +1,14 @@
 # Arbeitsstand
 
-**Version 0.1.0 · 09.11.2026 · Phase 1a (Web-App) begonnen**
+**Version 0.2.0 · 09.11.2026 · Phase 1a fertig, öffentlich unter forest.arndt-software.de**
 
 ## Fertig
 - Kernlogik mit 29 Unit-Tests: Geo/EUDR, Signatur- und Prüfkette, Mikrohabitate, Totholz, Länderprofile
 - Oberfläche: Start, Flächen (Ablaufen/Karte), Habitatbaum, Totholz, Feldbesuch (Diktieren, PDF),
   Nachweise (Prüfen, Prüf-Paket), Auditor-Prüfung, Einstellungen, Über & Grenzen
 - Deutsch + Englisch, PWA offline, Impressum/Datenschutz, nginx mit CSP und Sicherheits-Headern
-- Checks: Build, Unit-Tests, i18n, Features, Safety, Kontrast, Performance; Browser-Test 21/21
+- Checks: Build, Unit-Tests, i18n, Features, Safety, Kontrast, Performance; Browser-Test 26/26
+- Beschreibung (#/info), Roadmap (#/geplant), Demo-Wald, Sicherungs-Erinnerung, Installationshinweis
 
 ## Offen in Phase 1 (siehe docs/ROADMAP.md)
 - Native Hülle (Capacitor) mit App Attest / Play Integrity → Stufe A

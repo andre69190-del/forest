@@ -1,6 +1,10 @@
 @echo off
 REM BIOGLOW Forest - veroeffentlichen: bauen, testen, committen, pushen. Coolify deployt danach automatisch.
 cd /d "%~dp0"
+if not exist node_modules (
+  echo === Erstinstallation der Pakete ===
+  call npm ci || goto fehler
+)
 echo === Build ===
 call npm run build || goto fehler
 echo === Unit-Tests ===

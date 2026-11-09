@@ -45,7 +45,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 .notice-warn { background: var(--warn-bg); color: var(--warn-text); }
 .notice-error { background: var(--err-bg); color: var(--err-text); }
 .warn-text { color: var(--warn-text); font-size: .92rem; }
-.badge { font-size: .8rem; font-weight: 700; padding: 3px 8px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; }
+.badge { align-self: flex-start; font-size: .8rem; font-weight: 700; padding: 3px 8px; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; }
 .badge-A { color: var(--badge-a); } .badge-B { color: var(--badge-b); } .badge-C { color: var(--badge-c); } .badge-unknown { color: var(--muted); }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 8px; text-align: center; display: flex; flex-direction: column; }
@@ -81,3 +81,7 @@ code { font-family: ui-monospace, monospace; }
 .bottom-nav a { display: flex; align-items: center; justify-content: center; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .9rem; }
 .bottom-nav a.active { color: var(--primary); box-shadow: inset 0 3px 0 var(--primary); }
 @media (max-width: 420px) { .stats { grid-template-columns: repeat(2, 1fr); } .grid2 { grid-template-columns: 1fr; } }
+.lead { font-size: 1.08rem; margin: 0; }
+.bullets { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.btn-danger { color: var(--err-text); border-color: var(--err-text); }
+.notice a { color: inherit; font-weight: 700; }
