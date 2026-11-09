@@ -5,7 +5,7 @@
 import { db } from './db.js';
 import { createDeviceKey, signRecord, verifyRecord, verifyChain, trustLevel, plausibility, sha256Hex, GENESIS, importPublicJwk } from './trust.js';
 
-export const APP_VERSION = '0.2.2';
+export const APP_VERSION = '0.3.0';
 
 let keyPromise = null;
 /** Geräte-Schlüssel laden oder einmalig erzeugen. */
@@ -143,4 +143,32 @@ export function latestOnly(records) {
 export async function wipeAllLocalData() {
   await Promise.all([db.records.clear(), db.media.clear(), db.keys.clear(), db.settings.clear()]);
   keyPromise = null;
+}
+
+/**
+ * „Manipulation ausprobieren": nimmt den neuesten Nachweis, verändert in einer KOPIE (nur im Speicher)
+ * einen Messwert und prüft Original und Kopie. Die Datenbank bleibt unverändert.
+ */
+export async function tamperDemo() {
+  const key = await getDeviceKey();
+  const pub = await importPublicJwk(key.publicJwk);
+  const recs = await db.records.where('deviceKeyId').equals(key.keyId).sortBy('seq');
+  if (!recs.length) return null;
+  const pick = [...recs].reverse().find((r) => r.kind === 'habitat_tree') || recs.at(-1);
+  const forged = JSON.parse(JSON.stringify(pick));
+  let field, before, after;
+  const d = forged.data || {};
+  if (typeof d.bhdCm === 'number') { field = 'bhdCm'; before = d.bhdCm; after = d.bhdCm + 10; }
+  else if (typeof d.areaHa === 'number') { field = 'areaHa'; before = d.areaHa; after = Math.round(d.areaHa * 150) / 100; }
+  else if (typeof d.volumeM3Ha === 'number') { field = 'volumeM3Ha'; before = d.volumeM3Ha; after = d.volumeM3Ha + 5; }
+  else if (typeof d.notes === 'string') { field = 'notes'; before = d.notes; after = `${d.notes} (geändert)`; }
+  else { field = 'createdAt'; before = forged.createdAt; after = new Date(Date.parse(forged.createdAt) - 864e5).toISOString(); }
+  if (field === 'createdAt') forged.createdAt = after; else forged.data[field] = after;
+  const original = await verifyRecord(pick, pub);
+  const tampered = await verifyRecord(forged, pub);
+  return {
+    record: pick, field, before, after,
+    original: { ...original, level: trustLevel(pick, { ...original, mediaOk: true }) },
+    tampered: { ...tampered, level: trustLevel(forged, { ...tampered, mediaOk: true }) },
+  };
 }

@@ -5,14 +5,15 @@ import { averageFixes, validatePolygon, perimeterM, polygonAreaM2, m2ToHa } from
 import { createEvidence } from '../lib/evidence.js';
 import { toPos } from '../lib/media.js';
 import { getSetting } from '../lib/db.js';
+import { useSettings } from '../App.jsx';
 import PlotMap from '../components/PlotMap.jsx';
 import { Card, Field, Notice, PageHeader } from '../components/ui.jsx';
 
-const AVERAGE_SECONDS = 10;
 
 export default function PlotNew() {
   const { t, num } = useI18n();
   const nav = useNavigate();
+  const AVERAGE_SECONDS = useSettings().gpsAverageSec || 10;
   const [name, setName] = useState('');
   const [mode, setMode] = useState('walk');
   const [points, setPoints] = useState([]);

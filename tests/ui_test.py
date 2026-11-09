@@ -47,7 +47,13 @@ try:
         page.route('https://tile.openstreetmap.org/**', lambda r: r.fulfill(status=204, body=''))
         base = (LIVE.rstrip('/') + '/') if LIVE else f'http://127.0.0.1:{PORT}/'
         page.goto(base)
+        page.wait_for_selector('dialog.welcome[open]')
+        check('Begrüßung erscheint beim ersten Start', page.is_visible('text=Willkommen bei BIOGLOW Forest'))
+        page.click('dialog.welcome button:has-text("Leer starten")')
+        page.reload()
         page.wait_for_selector('text=Willkommen im Wald')
+        page.wait_for_timeout(500)
+        check('Begrüßung nach dem Schließen nicht mehr', not page.is_visible('dialog.welcome[open]'))
         check('Startseite (DE erkannt)', page.is_visible('text=Willkommen im Wald'))
 
         # Fläche auf der Karte setzen (4 Klicks ≈ Rechteck)
@@ -122,6 +128,16 @@ try:
         bundle = json.load(open(bundle_path))
         check('Prüf-Paket enthält 4 Nachweise + Foto', len(bundle['records']) == 4 and len(bundle['media']) == 1)
 
+        # Manipulation ausprobieren
+        page.click('button:has-text("Manipulation ausprobieren")')
+        page.wait_for_selector('.tamper-bad')
+        check('Manipulation: Original gültig, Kopie erkannt',
+              page.locator('.tamper-col').first.locator('.badge-B').count() == 1
+              and page.locator('.tamper-bad .badge-C').count() == 1
+              and 'Inhalt nachträglich verändert' in page.locator('.tamper-bad').inner_text())
+        page.locator('.list-button').first.click()
+        check('Nachweis-Details mit Fingerabdruck', page.locator('.details code.hash').first.inner_text().__len__() == 64)
+
         # EUDR-GeoJSON
         page.goto(plot_url)
         with page.expect_download() as dl:
@@ -156,6 +172,8 @@ try:
 
         # Sprache umschalten
         page.goto(base + '#/mehr')
+        page.select_option('select >> nth=1', 'dark')
+        check('Darstellung dunkel wählbar', page.evaluate("document.documentElement.dataset.theme") == 'dark')
         page.select_option('select >> nth=0', 'en')
         page.goto(base + '#/')
         check('Sprache EN', page.is_visible('text=Welcome to the forest'))
@@ -166,12 +184,16 @@ try:
         p2.on('pageerror', lambda e: errors.append(str(e)))
         p2.route('https://tile.openstreetmap.org/**', lambda r: r.fulfill(status=204, body=''))
         p2.goto(base)
-        p2.click('button:has-text("Demo-Wald laden")')
+        p2.click('dialog.welcome button:has-text("Mit Demo-Wald ansehen")')
         p2.wait_for_selector('text=Demo-Wald Hardt')
         check('Demo-Wald: 4 Habitatbäume auf der Fläche', p2.locator('.big').first.inner_text().startswith('4'))
         p2.goto(base)
-        check('Sicherungs-Erinnerung erscheint', p2.is_visible('text=Sichere sie regelmäßig'))
-        p2.click('text=Was ist BIOGLOW Forest?')
+        try:
+            p2.wait_for_selector('text=Sichere sie regelmäßig', timeout=5000); ok_b = True
+        except Exception:
+            ok_b = False
+        check('Sicherungs-Erinnerung erscheint', ok_b)
+        p2.click('.footer-links >> text=Was ist BIOGLOW Forest?')
         check('Beschreibung: Abschnitt Fälschungsschutz', p2.is_visible('text=Wie der Fälschungsschutz funktioniert'))
         p2.click('text=Was geplant ist')
         check('Roadmap: 6 Phasen', p2.locator('.card').count() == 6)

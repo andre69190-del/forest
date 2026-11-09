@@ -46,6 +46,8 @@ const dyn = [
   ...['walk', 'map'].map((k) => `plot.mode.${k}`), ...['line', 'standing'].map((k) => `dw.mode.${k}`),
   ...['A', 'B', 'C', 'unknown'].map((k) => `ev.level.${k}`),
   ...['done', 'next', 'later'].map((k) => `plan.status.${k}`),
+  ...['system', 'light', 'dark'].map((k) => `set.theme.${k}`),
+  ...['bhdCm', 'areaHa', 'volumeM3Ha', 'notes', 'createdAt'].map((k) => `tamper.field.${k}`),
   ...Object.entries({ '1a': ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang'], '1b': ['trems47', 'species', 'monitoring', 'qr', 'sync', 'backup'],
     '1c': ['native', 'attest', 'timestamp', 'store'], 2: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'],
     3: ['satellite', 'inventory', 'soil', 'tropics', 'lang2'], 4: ['citizen', 'dashboard', 'gbif', 'lang3'] })

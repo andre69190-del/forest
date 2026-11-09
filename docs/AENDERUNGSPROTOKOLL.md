@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+## 0.3.0 – 09.11.2026
+- Begrüßung als einmaliges Fenster (Sprache wählbar, Demo-Wald, Beschreibung); danach nur noch Link + „Begrüßung erneut zeigen“
+- Startseite entschlackt: Erfassen-Kacheln oben, Zahlen + „Zuletzt erfasst“, Demo nur bei leerer App, Installationshinweis ausblendbar
+- „Mehr“ gegliedert: Hilfe & Info · Werkzeuge · Einstellungen · Daten & Sicherung · Rechtliches
+- Neue Einstellungen: Darstellung (System/Hell/Dunkel), GPS-Mittelung 5–30 s, EUDR-Angaben als eigener Block
+- „Manipulation ausprobieren“: verändert eine Kopie und zeigt die Erkennung
+- Nachweise: werden beim Öffnen automatisch geprüft; antippen zeigt Details (Standort, Fotoquelle, Fingerabdruck, Vorgänger)
+- Browser-Test 31 Schritte
+
 ## 0.2.2 – 09.11.2026 (Hotfix)
 - 0.2.1 hatte mit `types { … }` die komplette nginx-Dateityp-Liste ersetzt → Live-Seite wurde als Download ausgeliefert (ca. 18:29–Fix)
 - Lösung: eigene location für .webmanifest mit default_type

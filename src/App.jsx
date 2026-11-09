@@ -15,17 +15,26 @@ import Audit from './pages/Audit.jsx';
 import More from './pages/More.jsx';
 import Info from './pages/Info.jsx';
 import Plan from './pages/Plan.jsx';
+import Welcome from './components/Welcome.jsx';
 
-const DEFAULTS = { profile: 'INT', producerName: '', producerCountry: '' };
+const DEFAULTS = {
+  profile: 'INT', producerName: '', producerCountry: '',
+  theme: 'system', gpsAverageSec: 10, welcomeDone: false, installHintDone: false,
+};
 const SettingsContext = createContext({ ...DEFAULTS, update: () => {} });
 export const useSettings = () => useContext(SettingsContext);
 
 function SettingsProvider({ children }) {
-  const [s, setS] = useState(DEFAULTS);
+  const [s, setS] = useState({ ...DEFAULTS, loaded: false });
   useEffect(() => {
     Promise.all(Object.keys(DEFAULTS).map(async (k) => [k, await getSetting(k, DEFAULTS[k])]))
-      .then((pairs) => setS(Object.fromEntries(pairs)));
+      .then((pairs) => setS({ ...Object.fromEntries(pairs), loaded: true }));
   }, []);
+  // Darstellung: hell / dunkel / wie System (data-theme am <html>)
+  useEffect(() => {
+    if (s.theme === 'system') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', s.theme);
+  }, [s.theme]);
   const update = (k, v) => { setS((old) => ({ ...old, [k]: v })); setSetting(k, v); };
   return <SettingsContext.Provider value={{ ...s, update }}>{children}</SettingsContext.Provider>;
 }
@@ -74,6 +83,7 @@ export default function App() {
             </Routes>
           </main>
           <Nav />
+          <Welcome />
         </HashRouter>
       </SettingsProvider>
     </I18nProvider>

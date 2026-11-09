@@ -10,6 +10,9 @@ def tokens(block):
     return dict(re.findall(r'--([\w-]+):\s*(#[0-9a-fA-F]{6})', block))
 light = tokens(css.split('@media (prefers-color-scheme: dark)')[0])
 dark = {**light, **tokens(css.split('@media (prefers-color-scheme: dark)')[1].split('}\n}')[0])}
+manual = tokens(css.split(':root[data-theme="dark"]')[1].split('}')[0])
+if {**light, **manual} != dark:
+    print('BEFUNDE: Dunkel-Tokens in [data-theme="dark"] weichen vom System-Dunkelmodus ab'); sys.exit(1)
 
 def lum(h):
     c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]

@@ -9,7 +9,7 @@
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0f1711; --surface: #18231b; --text: #e6efe8; --muted: #a9b8ad; --border: #33453a;
     --primary: #5fbf7f; --primary-text: #0b1a10; --accent: #f0a960;
     --ok-bg: #173a24; --ok-text: #b8ebc7; --warn-bg: #3d2b0c; --warn-text: #ffd89a; --err-bg: #431818; --err-text: #ffc4c4;
@@ -17,6 +17,16 @@
     --badge-a: #b8ebc7; --badge-b: #c4dcff; --badge-c: #ffd89a;
   }
 }
+/* Manuell gewählt (Einstellungen → Darstellung). Werte identisch zum Block oben – contrast_check.py prüft das. */
+:root[data-theme="dark"] {
+    --bg: #0f1711; --surface: #18231b; --text: #e6efe8; --muted: #a9b8ad; --border: #33453a;
+    --primary: #5fbf7f; --primary-text: #0b1a10; --accent: #f0a960;
+    --ok-bg: #173a24; --ok-text: #b8ebc7; --warn-bg: #3d2b0c; --warn-text: #ffd89a; --err-bg: #431818; --err-text: #ffc4c4;
+    --info-bg: #182a40; --info-text: #c4dcff;
+    --badge-a: #b8ebc7; --badge-b: #c4dcff; --badge-c: #ffd89a;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 .app { max-width: 720px; margin: 0 auto; padding: 16px 16px calc(var(--nav-h) + 24px); }
@@ -85,3 +95,21 @@ code { font-family: ui-monospace, monospace; }
 .bullets { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
 .btn-danger { color: var(--err-text); border-color: var(--err-text); }
 .notice a { color: inherit; font-weight: 700; }
+.section-title { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 10px 0 -4px; }
+.footer-links { text-align: center; color: var(--muted); margin: 4px 0; }
+.footer-links a { color: var(--primary); font-weight: 600; }
+.list-button { width: 100%; text-align: left; font: inherit; cursor: pointer; }
+.details { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 6px 0 0; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: .92rem; }
+.details dt { font-weight: 600; } .details dd { margin: 0; overflow-wrap: anywhere; }
+.hash { font-size: .8rem; }
+.tamper { display: flex; flex-direction: column; gap: 10px; }
+.tamper-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tamper-col { display: flex; flex-direction: column; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--ok-bg); color: var(--ok-text); }
+.tamper-bad { background: var(--err-bg); color: var(--err-text); }
+.icon-btn { width: 44px; height: 44px; border: 0; background: none; color: var(--text); font-size: 28px; cursor: pointer; border-radius: 10px; }
+dialog.welcome { border: 0; padding: 0; border-radius: 16px; max-width: 520px; width: calc(100% - 24px); background: var(--surface); color: var(--text); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+dialog.welcome::backdrop { background: rgba(10, 20, 12, .55); }
+.welcome-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; max-height: 85vh; overflow: auto; }
+.welcome-body h2 { margin: 0; font-size: 1.3rem; }
+.welcome-lang { display: flex; align-items: center; gap: 10px; } .welcome-lang select { width: auto; }
+.welcome-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
