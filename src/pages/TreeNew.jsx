@@ -5,8 +5,10 @@ import { createEvidence } from '../lib/evidence.js';
 import PositionPicker from '../components/PositionPicker.jsx';
 import Camera from '../components/Camera.jsx';
 import TremPicker from '../components/TremPicker.jsx';
+import SpeciesId from '../components/SpeciesId.jsx';
 import PlotSelect from '../components/PlotSelect.jsx';
 import { Card, Field, Notice, PageHeader } from '../components/ui.jsx';
+import { useSettings } from '../App.jsx';
 
 export default function TreeNew() {
   const { t } = useI18n();
@@ -16,7 +18,9 @@ export default function TreeNew() {
   const [pos, setPos] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [f, setF] = useState({ species: '', bhdCm: '', heightM: '', alive: true, marking: '', note: '' });
-  const [trems, setTrems] = useState([]);
+  const settings = useSettings();
+  const [trems, setTrems] = useState({ groups: [], types: [] });
+  const [speciesAi, setSpeciesAi] = useState(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -28,7 +32,7 @@ export default function TreeNew() {
     try {
       await createEvidence('habitat_tree', {
         species: f.species.trim(), bhdCm: f.bhdCm ? Number(f.bhdCm) : null, heightM: f.heightM ? Number(f.heightM) : null,
-        alive: f.alive, marking: f.marking.trim(), note: f.note.trim(), trems,
+        alive: f.alive, marking: f.marking.trim(), note: f.note.trim(), trems: trems.groups, tremTypes: trems.types, speciesAi,
       }, { position: pos, photos, plotId });
       nav(plotId ? `/flaechen/${plotId}` : '/nachweise');
     } catch (e) { setErr(t('common.error', { msg: e.message })); setBusy(false); }
@@ -41,7 +45,10 @@ export default function TreeNew() {
         <Field label={t('common.plot')}><PlotSelect value={plotId} onChange={setPlotId} /></Field>
         <Field label={t('pos.title')}><PositionPicker value={pos} onChange={setPos} /></Field>
         <Field label={t('cam.title')}><Camera photos={photos} onChange={setPhotos} /></Field>
-        <Field label={t('tree.species')}><input value={f.species} onChange={set('species')} placeholder={t('tree.speciesPh')} /></Field>
+        <Field label={t('tree.species')}>
+          <input value={f.species} onChange={(e) => { setF({ ...f, species: e.target.value }); setSpeciesAi(null); }} placeholder={t('tree.speciesPh')} />
+          <SpeciesId photos={photos} onPick={(label, meta) => { setF((o) => ({ ...o, species: label })); setSpeciesAi(meta); }} />
+        </Field>
         <div className="grid2">
           <Field label={t('tree.bhd')}><input type="number" inputMode="decimal" min="0" max="500" value={f.bhdCm} onChange={set('bhdCm')} /></Field>
           <Field label={`${t('tree.height')} (${t('common.optional')})`}><input type="number" inputMode="decimal" min="0" max="120" value={f.heightM} onChange={set('heightM')} /></Field>
@@ -55,7 +62,12 @@ export default function TreeNew() {
       </Card>
       <Card title={t('tree.trems')}>
         <p className="muted">{t('tree.tremsHint')}</p>
-        <TremPicker value={trems} onChange={setTrems} />
+        <div className="segmented" role="group" aria-label={t('trem.detail')}>
+          {['groups', 'types'].map((d) => (
+            <button key={d} type="button" className={settings.tremDetail === d ? 'on' : ''} onClick={() => settings.update('tremDetail', d)}>{t(`trem.detail.${d}`)}</button>
+          ))}
+        </div>
+        <TremPicker value={trems} onChange={setTrems} detail={settings.tremDetail} />
       </Card>
       <Card>
         <Field label={t('common.note')}><textarea rows={3} value={f.note} onChange={set('note')} /></Field>

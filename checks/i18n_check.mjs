@@ -35,24 +35,30 @@ for (const p of code) for (const m of readFileSync(p, 'utf8').matchAll(/\bt\(\s*
 // Schlüssel, die als Liste im Code stehen (['about.text1', …])
 for (const p of code) for (const m of readFileSync(p, 'utf8').matchAll(/'((?:about|capture|home|info)\.[a-zA-Z0-9.]+)'/g)) used.add(m[1]);
 
-const { TREM_FORMS, TREM_GROUPS, PROFILES, DECAY_CLASSES } = await import(join(ROOT, 'src', 'lib', 'forestry.js'));
+const { TREM_FORMS, TREM_GROUPS, TREM_TYPES, PROFILES, DECAY_CLASSES } = await import(join(ROOT, 'src', 'lib', 'forestry.js'));
 const dyn = [
   ...TREM_FORMS.map((f) => `trem.form.${f.key}`), ...TREM_GROUPS.map((g) => `trem.${g}`),
+  ...TREM_TYPES.flatMap((x) => [`trem.t.${x.key}`, `trem.min.${x.key}`]),
   ...Object.keys(PROFILES).map((k) => `profile.${k}`), ...DECAY_CLASSES.map((c) => `dw.decay.${c}`),
   ...['home', 'plots', 'capture', 'evidence', 'more'].map((k) => `nav.${k}`),
   ...['plots', 'trees', 'records', 'visits'].map((k) => `home.stats.${k}`),
-  ...['plot', 'tree', 'deadwood', 'visit'].flatMap((k) => [`capture.${k}`, `capture.${k}.desc`]),
+  ...['plot', 'tree', 'deadwood', 'visit', 'meeting'].flatMap((k) => [`capture.${k}`, `capture.${k}.desc`]),
   ...['too_few_points', 'self_intersection', 'duplicate_after_rounding', 'collinear', 'out_of_range'].map((k) => `plot.issue.${k}`),
   ...['walk', 'map'].map((k) => `plot.mode.${k}`), ...['line', 'standing'].map((k) => `dw.mode.${k}`),
   ...['A', 'B', 'C', 'unknown'].map((k) => `ev.level.${k}`),
   ...['done', 'next', 'later'].map((k) => `plan.status.${k}`),
+  ...['groups', 'types'].map((k) => `trem.detail.${k}`),
+  ...['unchanged', 'changed', 'dead_standing', 'fallen', 'felled'].map((k) => `mon.cond.${k}`),
+  ...['bark', 'leaf', 'habit', 'fruit', 'flower', 'auto'].map((k) => `species.organ.${k}`),
+  ...['no_key', 'not_a_plant', 'quota', 'network', 'other'].map((k) => `species.err.${k}`),
   ...['system', 'light', 'dark'].map((k) => `set.theme.${k}`),
   ...['bhdCm', 'areaHa', 'volumeM3Ha', 'notes', 'createdAt'].map((k) => `tamper.field.${k}`),
-  ...Object.entries({ '1a': ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang'], '1b': ['trems47', 'species', 'monitoring', 'qr', 'sync', 'backup'],
+  ...Object.entries({ '1a': ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang', 'meeting'], '1b': ['trems47', 'species', 'monitoring', 'qr', 'auditfolder', 'sync', 'backup'],
     '1c': ['native', 'attest', 'timestamp', 'store'], 2: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'],
     3: ['satellite', 'inventory', 'soil', 'tropics', 'lang2'], 4: ['citizen', 'dashboard', 'gbif', 'lang3'] })
     .flatMap(([ph, items]) => [`plan.p${ph}.title`, ...items.map((i) => `plan.p${ph}.${i}`)]),
-  ...['plot', 'habitat_tree', 'deadwood_line', 'deadwood_standing', 'visit'].map((k) => `ev.kind.${k}`),
+  ...['plot', 'habitat_tree', 'deadwood_line', 'deadwood_standing', 'visit', 'meeting', 'tree_revisit'].map((k) => `ev.kind.${k}`),
+  ...['eudr', 'group_cert', 'wood_construction', 'finance', 'biodiversity', 'carbon', 'other'].map((k) => `meet.topic.${k}`),
   ...['hash_mismatch', 'signature_invalid', 'media_changed', 'media_missing', 'chain_break'].map((k) => `ev.problem.${k}`),
   ...['low_gps_accuracy', 'no_position', 'position_stale', 'photo_blurry', 'future_time', 'bad_time', 'bad_position'].map((k) => `ev.warn.${k}`),
 ];

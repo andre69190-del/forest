@@ -9,6 +9,7 @@ const SECTIONS = [
   ['info.what.title', ['info.what.p1', 'info.what.p2'], []],
   ['info.who.title', [], ['info.who.owner', 'info.who.group', 'info.who.auditor', 'info.who.visitor']],
   ['info.features.title', [], ['info.features.plot', 'info.features.tree', 'info.features.deadwood', 'info.features.visit',
+    'info.features.trems47', 'info.features.monitoring', 'info.features.auditfolder', 'info.features.meeting',
     'info.features.evidence', 'info.features.audit', 'info.features.profiles', 'info.features.offline']],
   ['info.trust.title', ['info.trust.p1', 'info.trust.p2'], ['info.trust.a', 'info.trust.b', 'info.trust.c']],
   ['info.data.title', ['info.data.p1', 'info.data.p2'], []],

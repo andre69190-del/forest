@@ -16,10 +16,13 @@ import More from './pages/More.jsx';
 import Info from './pages/Info.jsx';
 import Plan from './pages/Plan.jsx';
 import Welcome from './components/Welcome.jsx';
+import Meeting from './pages/Meeting.jsx';
+import TreeDetail from './pages/TreeDetail.jsx';
+import Scan from './pages/Scan.jsx';
 
 const DEFAULTS = {
   profile: 'INT', producerName: '', producerCountry: '',
-  theme: 'system', gpsAverageSec: 10, welcomeDone: false, installHintDone: false,
+  theme: 'system', gpsAverageSec: 10, tremDetail: 'groups', plantnetKey: '', welcomeDone: false, installHintDone: false,
 };
 const SettingsContext = createContext({ ...DEFAULTS, update: () => {} });
 export const useSettings = () => useContext(SettingsContext);
@@ -72,6 +75,9 @@ export default function App() {
               <Route path="/erfassen/baum" element={<TreeNew />} />
               <Route path="/erfassen/totholz" element={<Deadwood />} />
               <Route path="/erfassen/besuch" element={<Visit />} />
+              <Route path="/erfassen/gespraech" element={<Meeting />} />
+              <Route path="/baum/:id" element={<TreeDetail />} />
+              <Route path="/scannen" element={<Scan />} />
               <Route path="/flaechen" element={<Plots />} />
               <Route path="/flaechen/:key" element={<PlotDetail />} />
               <Route path="/nachweise" element={<Evidence />} />

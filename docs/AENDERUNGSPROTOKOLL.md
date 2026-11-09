@@ -1,5 +1,22 @@
 # Änderungsprotokoll
 
+## 0.4.0 – 09.11.2026 (Phase 1b, ohne Sync)
+- 47 Mikrohabitat-Typen mit Mindestgrößen (WSL-Feldführer 2020); Umschalter 15 Gruppen / 47 Typen, auch in den Einstellungen
+- KI-Artbestimmung über Pl@ntNet (nur auf Knopfdruck; Schlüssel aus Einstellungen oder Build-Variable VITE_PLANTNET_KEY – nicht im Code)
+- Habitatbaum-Detailseite (#/baum/:id) mit Daten, Karte, Vertrauensstufe
+- Monitoring: Wiederholungsaufnahmen (Zustand, Foto, Notiz) mit Vorher/Nachher
+- QR-Plaketten: Code je Baum, Etiketten-PDF (8 je A4), Scanner (#/scannen) mit BarcodeDetector/jsQR
+- Auditor-Mappe je Fläche: PDF (Kennzahlen, Mikrohabitat-Vielfalt, alle Fingerabdrücke, Prüfanleitung) + Prüf-Paket nur dieser Fläche
+- PDF: Sonderzeichen (→, „“, ø …) werden für die Standardschrift ersetzt
+- Datenschutz: Abschnitt Pl@ntNet; CSP erlaubt my-api.plantnet.org
+- Unit-Tests 40, Browser-Test 42 Schritte
+
+## 0.3.1 – 09.11.2026
+- Gesprächsnotiz für Konferenzen (COP31): Foto Namensschild/Visitenkarte, Organisation, Themen-Chips, Diktat, Follow-up mit Datum;
+  Follow-up-Mail (mailto), Kontakt als vCard, alle Gespräche als CSV; signiert wie jeder Nachweis
+- Startseite: eigene Kachel „Gesprächsnotiz“
+- Unit-Tests 32, Browser-Test 34 Schritte
+
 ## 0.3.0 – 09.11.2026
 - Begrüßung als einmaliges Fenster (Sprache wählbar, Demo-Wald, Beschreibung); danach nur noch Link + „Begrüßung erneut zeigen“
 - Startseite entschlackt: Erfassen-Kacheln oben, Zahlen + „Zuletzt erfasst“, Demo nur bei leerer App, Installationshinweis ausblendbar

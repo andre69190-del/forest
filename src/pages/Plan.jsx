@@ -4,8 +4,8 @@ import { APP_VERSION } from '../lib/evidence.js';
 import { Card, PageHeader } from '../components/ui.jsx';
 
 const PHASES = [
-  { key: '1a', status: 'done', items: ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang'] },
-  { key: '1b', status: 'next', items: ['trems47', 'species', 'monitoring', 'qr', 'sync', 'backup'] },
+  { key: '1a', status: 'done', items: ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang', 'meeting'] },
+  { key: '1b', status: 'next', items: ['trems47', 'species', 'monitoring', 'qr', 'auditfolder', 'sync', 'backup'], done: ['trems47', 'species', 'monitoring', 'qr', 'auditfolder'] },
   { key: '1c', status: 'later', items: ['native', 'attest', 'timestamp', 'store'] },
   { key: '2', status: 'later', items: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'] },
   { key: '3', status: 'later', items: ['satellite', 'inventory', 'soil', 'tropics', 'lang2'] },
@@ -21,7 +21,9 @@ export default function Plan() {
       {PHASES.map((ph) => (
         <Card key={ph.key} title={`${t('plan.phase')} ${ph.key} · ${t(`plan.p${ph.key}.title`)}`}>
           <span className={`badge badge-${ph.status === 'done' ? 'A' : ph.status === 'next' ? 'B' : 'unknown'}`}>{t(`plan.status.${ph.status}`)}</span>
-          <ul className="bullets">{ph.items.map((i) => <li key={i}>{t(`plan.p${ph.key}.${i}`)}</li>)}</ul>
+          <ul className="bullets">{ph.items.map((i) => (
+            <li key={i}>{(ph.status === 'done' || (ph.done || []).includes(i)) ? '✓ ' : ''}{t(`plan.p${ph.key}.${i}`)}</li>
+          ))}</ul>
         </Card>
       ))}
       <p className="muted">{t('plan.feedback')}</p>

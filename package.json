@@ -1,7 +1,7 @@
 {
   "name": "bioglow-forest",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "BIOGLOW Forest – prüfbare Feldnachweise für zertifizierte Wälder (Arbeitsname: forest)",
   "type": "module",
   "scripts": {
@@ -15,7 +15,9 @@
     "dexie": "^4.0.11",
     "dexie-react-hooks": "^4.4.0",
     "jspdf": "^4.2.1",
+    "jsqr": "^1.4.0",
     "leaflet": "^1.9.4",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",

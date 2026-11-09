@@ -41,6 +41,7 @@ export default function More() {
 
       <h2 className="section-title">{t('more.tools')}</h2>
       <LinkList items={[
+        ['/scannen', t('scan.title'), t('scan.short')],
         ['/nachweise#manipulation', t('tamper.title'), t('tamper.short')],
         ['/pruefen', t('more.audit'), t('more.auditDesc')],
       ]} />
@@ -62,11 +63,20 @@ export default function More() {
             {Object.keys(PROFILES).map((k) => <option key={k} value={k}>{t(`profile.${k}`)}</option>)}
           </select>
         </Field>
+        <Field label={t('trem.detail')} hint={t('trem.detailHint')}>
+          <select value={settings.tremDetail} onChange={(e) => settings.update('tremDetail', e.target.value)}>
+            {['groups', 'types'].map((d) => <option key={d} value={d}>{t(`trem.detail.${d}`)}</option>)}
+          </select>
+        </Field>
         <Field label={t('set.gpsAverage')} hint={t('set.gpsAverageHint')}>
           <select value={settings.gpsAverageSec} onChange={(e) => settings.update('gpsAverageSec', Number(e.target.value))}>
             {[5, 10, 20, 30].map((s) => <option key={s} value={s}>{t('set.seconds', { n: s })}</option>)}
           </select>
         </Field>
+      </Card>
+      <Card title={t('species.title')}>
+        <p className="muted">{t('species.settingsHint')}</p>
+        <Field label={t('species.key')}><input value={settings.plantnetKey} onChange={(e) => settings.update('plantnetKey', e.target.value.trim())} placeholder={t('species.keyPh')} autoComplete="off" /></Field>
       </Card>
       <Card title={t('set.eudr')}>
         <p className="muted">{t('set.eudrHint')}</p>

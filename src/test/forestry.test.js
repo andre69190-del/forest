@@ -37,3 +37,22 @@ describe('Länderprofil', () => {
     expect(habitatTreeStatus(trees, 1, PROFILES.DE).status).toBe('none');
   });
 });
+
+import { TREM_TYPES, typesOfGroup, groupsFromTypes } from '../lib/forestry.js';
+describe('47 Mikrohabitat-Typen', () => {
+  it('47 eindeutige Typen, jede der 15 Gruppen hat mindestens einen', () => {
+    expect(TREM_TYPES.length).toBe(47);
+    expect(new Set(TREM_TYPES.map((x) => x.key)).size).toBe(47);
+    for (const g of TREM_GROUPS) expect(typesOfGroup(g).length).toBeGreaterThan(0);
+  });
+  it('Gruppen ergeben sich aus Typen, in Katalog-Reihenfolge', () => {
+    expect(groupsFromTypes(['resinosis', 'wp_flute'])).toEqual(['woodpecker_cavities', 'fresh_exudates']);
+  });
+});
+
+import { pdfSafe } from '../lib/pdf.js';
+describe('PDF-Text', () => {
+  it('ersetzt Zeichen, die die PDF-Standardschrift nicht kennt', () => {
+    expect(pdfSafe('Mehr → „Paket prüfen“ – ø ≥ 3 …')).toBe('Mehr -> "Paket prüfen" - Ø >= 3 ...');
+  });
+});

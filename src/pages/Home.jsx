@@ -10,7 +10,10 @@ import { Card, Notice } from '../components/ui.jsx';
 import InstallHint from '../components/InstallHint.jsx';
 import { useOnline } from '../App.jsx';
 
-const KIND_PATH = { plot: (r) => `/flaechen/${r.data.plotKey}` };
+const KIND_PATH = {
+  plot: (r) => `/flaechen/${r.data.plotKey}`, habitat_tree: (r) => `/baum/${r.id}`, tree_revisit: (r) => `/baum/${r.data.treeId}`,
+  meeting: () => '/erfassen/gespraech', visit: () => '/erfassen/besuch',
+};
 
 export default function Home() {
   const { t, date } = useI18n();
@@ -44,6 +47,7 @@ export default function Home() {
         <Link className="tile" to="/erfassen/baum">{t('capture.tree')}</Link>
         <Link className="tile" to="/erfassen/totholz">{t('capture.deadwood')}</Link>
         <Link className="tile" to="/erfassen/besuch">{t('capture.visit')}</Link>
+        <Link className="tile tile-wide tile-quiet" to="/erfassen/gespraech">{t('capture.meeting')}</Link>
       </div>
 
       {data.records > 0 ? (

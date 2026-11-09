@@ -5,6 +5,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
+# Optional: Pl@ntNet-Schlüssel als Build-Variable aus Coolify (landet – wie bei BIOGLOW – im ausgelieferten Code)
+ARG VITE_PLANTNET_KEY=
+ENV VITE_PLANTNET_KEY=$VITE_PLANTNET_KEY
 RUN npm run build && npx vitest run
 
 FROM nginx:alpine

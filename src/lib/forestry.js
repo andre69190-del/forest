@@ -21,6 +21,70 @@ export const TREM_FORMS = [
 
 export const TREM_GROUPS = TREM_FORMS.flatMap((f) => f.groups);
 
+/**
+ * Die 47 Mikrohabitat-Typen (Bütler et al. 2020, WSL-Feldführer nach Larrieu et al. 2018) → Gruppe.
+ * Eigene, stabile Schlüssel (gehen in Nachweise ein); Namen + Mindestgrößen stehen im i18n (trem.t.*, trem.min.*).
+ * Quelle Mindestgrößen: https://wsl.ch/en/publications/guida-da-campo-ai-dendromicrohabitat
+ */
+export const TREM_TYPES = [
+  { key: 'wp_small', group: 'woodpecker_cavities' },
+  { key: 'wp_medium', group: 'woodpecker_cavities' },
+  { key: 'wp_large', group: 'woodpecker_cavities' },
+  { key: 'wp_flute', group: 'woodpecker_cavities' },
+  { key: 'rot_base', group: 'rot_holes' },
+  { key: 'rot_trunk', group: 'rot_holes' },
+  { key: 'rot_semiopen', group: 'rot_holes' },
+  { key: 'rot_chimney_base', group: 'rot_holes' },
+  { key: 'rot_chimney_trunk', group: 'rot_holes' },
+  { key: 'rot_hollow_branch', group: 'rot_holes' },
+  { key: 'insect_galleries', group: 'insect_galleries' },
+  { key: 'dendrotelm', group: 'concavities' },
+  { key: 'wp_foraging', group: 'concavities' },
+  { key: 'concavity_bark', group: 'concavities' },
+  { key: 'concavity_buttress', group: 'concavities' },
+  { key: 'bark_loss', group: 'exposed_sapwood' },
+  { key: 'fire_scar', group: 'exposed_sapwood' },
+  { key: 'bark_shelter', group: 'exposed_sapwood' },
+  { key: 'bark_pocket', group: 'exposed_sapwood' },
+  { key: 'stem_breakage', group: 'exposed_heartwood' },
+  { key: 'limb_breakage', group: 'exposed_heartwood' },
+  { key: 'crack', group: 'exposed_heartwood' },
+  { key: 'lightning_scar', group: 'exposed_heartwood' },
+  { key: 'fork_split', group: 'exposed_heartwood' },
+  { key: 'dead_branches', group: 'crown_deadwood' },
+  { key: 'dead_top', group: 'crown_deadwood' },
+  { key: 'broken_limb_stub', group: 'crown_deadwood' },
+  { key: 'witches_broom', group: 'twig_tangles' },
+  { key: 'epicormic_shoots', group: 'twig_tangles' },
+  { key: 'burr', group: 'burrs_cankers' },
+  { key: 'canker', group: 'burrs_cankers' },
+  { key: 'polypore_perennial', group: 'perennial_fungi' },
+  { key: 'polypore_annual', group: 'ephemeral_fungi' },
+  { key: 'pulpy_agaric', group: 'ephemeral_fungi' },
+  { key: 'pyrenomycete', group: 'ephemeral_fungi' },
+  { key: 'myxomycetes', group: 'ephemeral_fungi' },
+  { key: 'bryophytes', group: 'epiphytes_parasites' },
+  { key: 'lichens', group: 'epiphytes_parasites' },
+  { key: 'ivy_lianas', group: 'epiphytes_parasites' },
+  { key: 'ferns', group: 'epiphytes_parasites' },
+  { key: 'mistletoe', group: 'epiphytes_parasites' },
+  { key: 'nest_vertebrate', group: 'nests' },
+  { key: 'nest_invertebrate', group: 'nests' },
+  { key: 'microsoil_bark', group: 'microsoil' },
+  { key: 'microsoil_crown', group: 'microsoil' },
+  { key: 'sap_run', group: 'fresh_exudates' },
+  { key: 'resinosis', group: 'fresh_exudates' },
+];
+
+export const typesOfGroup = (group) => TREM_TYPES.filter((t) => t.group === group).map((t) => t.key);
+
+/** Gruppen aus gewählten Typen ableiten (ein Baum mit Typ X trägt automatisch dessen Gruppe). */
+export function groupsFromTypes(types, extraGroups = []) {
+  const set = new Set(extraGroups);
+  for (const k of types) { const t = TREM_TYPES.find((x) => x.key === k); if (t) set.add(t.group); }
+  return TREM_GROUPS.filter((g) => set.has(g));
+}
+
 export function formOfGroup(group) {
   const f = TREM_FORMS.find((x) => x.groups.includes(group));
   return f ? f.key : null;

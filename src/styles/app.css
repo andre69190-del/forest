@@ -113,3 +113,23 @@ dialog.welcome::backdrop { background: rgba(10, 20, 12, .55); }
 .welcome-body h2 { margin: 0; font-size: 1.3rem; }
 .welcome-lang { display: flex; align-items: center; gap: 10px; } .welcome-lang select { width: auto; }
 .welcome-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip-toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-toggle { display: inline-flex; align-items: center; min-height: 40px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; background: var(--bg); }
+.chip-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip-toggle.on { background: var(--primary); color: var(--primary-text); border-color: var(--primary); font-weight: 600; }
+.chip-toggle:focus-within { outline: 3px solid var(--primary); outline-offset: 2px; }
+.tile-wide { grid-column: 1 / -1; min-height: 56px; }
+.tile-quiet { background: var(--surface); color: var(--primary); border: 2px solid var(--primary); }
+.trem-group { border-top: 1px solid var(--border); padding: 6px 0; }
+.trem-group:first-of-type { border-top: 0; }
+.trem-group summary { display: flex; justify-content: space-between; align-items: center; min-height: 40px; cursor: pointer; font-weight: 600; }
+.count-badge { font-size: .8rem; background: var(--primary); color: var(--primary-text); border-radius: 999px; padding: 2px 8px; }
+.check-type { align-items: flex-start; padding: 4px 0 4px 8px; }
+.check-type input { margin-top: 3px; }
+.check-type span { display: flex; flex-direction: column; } .check-type small { color: var(--muted); }
+.photo { width: 100%; max-height: 340px; object-fit: cover; border-radius: 12px; display: block; background: var(--border); }
+.photo-empty { aspect-ratio: 4 / 3; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.compare figure { margin: 0; } .compare .photo { aspect-ratio: 1; max-height: none; }
+.compare figcaption { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+.qr { width: 200px; height: 200px; image-rendering: pixelated; background: #fff; padding: 8px; border-radius: 8px; align-self: center; }

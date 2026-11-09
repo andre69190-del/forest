@@ -9,7 +9,10 @@ export default function Plots() {
   return (
     <div className="page">
       <PageHeader title={t('plots.title')} />
-      <Link className="btn btn-primary" to="/erfassen/flaeche">{t('plots.new')}</Link>
+      <div className="row">
+        <Link className="btn btn-primary" to="/erfassen/flaeche">{t('plots.new')}</Link>
+        <Link className="btn" to="/scannen">{t('scan.title')}</Link>
+      </div>
       {plots.length === 0 ? <p className="muted">{t('plots.empty')}</p> : (
         <ul className="list">
           {plots.map((p) => (

@@ -1,6 +1,6 @@
 # Arbeitsstand
 
-**Version 0.2.0 · 09.11.2026 · Phase 1a fertig, öffentlich unter forest.arndt-software.de**
+**Version 0.4.0 · 09.11.2026 · Phase 1a fertig, 1b bis auf Sync/Gruppen fertig; live unter forest.arndt-software.de**
 
 ## Fertig
 - Kernlogik mit 29 Unit-Tests: Geo/EUDR, Signatur- und Prüfkette, Mikrohabitate, Totholz, Länderprofile
