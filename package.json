@@ -1,0 +1,31 @@
+{
+  "name": "bioglow-forest",
+  "private": true,
+  "version": "0.1.0",
+  "description": "BIOGLOW Forest – prüfbare Feldnachweise für zertifizierte Wälder (Arbeitsname: forest)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "checks": "bash checks/run_all.sh"
+  },
+  "dependencies": {
+    "dexie": "^4.0.11",
+    "dexie-react-hooks": "^4.4.0",
+    "jspdf": "^4.2.1",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.30.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "fake-indexeddb": "^6.0.0",
+    "vite": "^6.0.7",
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.2.4"
+  }
+}
