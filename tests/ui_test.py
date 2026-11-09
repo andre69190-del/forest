@@ -7,6 +7,7 @@ Spielt den Kern-Ablauf echt im Browser durch – mit simuliertem GPS und simulie
   → Paket im Auditor-Modus prüfen → Manipulation am Paket wird erkannt → Sprache EN.
 Voraussetzung: npm run build. Start: python3 tests/ui_test.py   (Exit 1 bei Fehlern)
 Browser: Playwright-Chromium oder CHROME_PATH=/pfad/zu/chrome
+Live-Seite testen (mit echter CSP): BASE_URL=https://forest.arndt-software.de python3 tests/ui_test.py
 """
 import json, os, subprocess, sys, time, socket
 from playwright.sync_api import sync_playwright
@@ -27,10 +28,11 @@ def wait_port(port, timeout=20):
         time.sleep(0.3)
     return False
 
-server = subprocess.Popen(['npx', 'vite', 'preview', '--port', str(PORT), '--strictPort'], cwd=ROOT,
+LIVE = os.environ.get('BASE_URL')
+server = None if LIVE else subprocess.Popen(['npx', 'vite', 'preview', '--port', str(PORT), '--strictPort'], cwd=ROOT,
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 try:
-    if not wait_port(PORT): print('Server startet nicht'); sys.exit(1)
+    if server and not wait_port(PORT): print('Server startet nicht'); sys.exit(1)
     with sync_playwright() as p:
         kw = {'args': ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']}
         if os.environ.get('CHROME_PATH'): kw['executable_path'] = os.environ['CHROME_PATH']
@@ -41,8 +43,9 @@ try:
         errors = []
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.on('console', lambda m: m.type == 'error' and 'tile.openstreetmap' not in m.text and errors.append(m.text))
+        page.on('console', lambda m: 'Content Security Policy' in m.text and errors.append('CSP: ' + m.text[:160]))
         page.route('https://tile.openstreetmap.org/**', lambda r: r.fulfill(status=204, body=''))
-        base = f'http://127.0.0.1:{PORT}/'
+        base = (LIVE.rstrip('/') + '/') if LIVE else f'http://127.0.0.1:{PORT}/'
         page.goto(base)
         page.wait_for_selector('text=Willkommen im Wald')
         check('Startseite (DE erkannt)', page.is_visible('text=Willkommen im Wald'))
@@ -182,7 +185,7 @@ try:
         if errors: print('\n'.join(errors[:5]))
         browser.close()
 finally:
-    server.terminate()
+    if server: server.terminate()
 
 ok = sum(1 for _, c in results if c)
 print(f'\n{ok}/{len(results)} OK')

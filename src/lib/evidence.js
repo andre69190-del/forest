@@ -5,7 +5,7 @@
 import { db } from './db.js';
 import { createDeviceKey, signRecord, verifyRecord, verifyChain, trustLevel, plausibility, sha256Hex, GENESIS, importPublicJwk } from './trust.js';
 
-export const APP_VERSION = '0.2.0';
+export const APP_VERSION = '0.2.1';
 
 let keyPromise = null;
 /** Geräte-Schlüssel laden oder einmalig erzeugen. */

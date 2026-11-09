@@ -1,6 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { readFileSync } from 'node:fs';
+
+// Sicherheits-Header aus der nginx-Config übernehmen (eine Quelle), damit Tests mit `vite preview`
+// dieselbe Content-Security-Policy sehen wie die Live-Seite.
+const nginx = readFileSync(new URL('./deploy/nginx-container.conf', import.meta.url), 'utf8');
+const header = (name) => (nginx.match(new RegExp(`add_header\\s+${name}\\s+"([^"]+)"`)) || [])[1];
+const securityHeaders = Object.fromEntries(['Content-Security-Policy', 'Permissions-Policy', 'X-Frame-Options', 'X-Content-Type-Options', 'Referrer-Policy']
+  .map((h) => [h, header(h)]).filter(([, v]) => v));
 
 export default defineConfig({
   plugins: [
@@ -30,6 +38,7 @@ export default defineConfig({
       },
     }),
   ],
+  preview: { headers: securityHeaders },
   build: { chunkSizeWarningLimit: 800 },
   test: { environment: 'node', include: ['src/test/**/*.test.js'] },
 });

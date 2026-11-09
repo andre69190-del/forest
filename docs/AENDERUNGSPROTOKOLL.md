@@ -1,5 +1,11 @@
 # Änderungsprotokoll
 
+## 0.2.1 – 09.11.2026
+- Live-Fehler behoben: Flächen-Pass mit Foto wurde von der CSP blockiert (connect-src erlaubt jetzt blob:/data: für jsPDF)
+- nginx liefert manifest.webmanifest mit richtigem Typ (application/manifest+json)
+- `vite preview` übernimmt die Sicherheits-Header aus deploy/nginx-container.conf → Tests laufen mit derselben CSP wie live
+- Browser-Test: CSP-Verstöße zählen als Fehler; `BASE_URL=…` testet die Live-Seite
+
 ## 0.2.0 – 09.11.2026
 - Seite „Über BIOGLOW Forest“ (#/info): ausführliche Beschreibung DE/EN
 - Seite „Was geplant ist“ (#/geplant): Roadmap in 6 Phasen
