@@ -48,6 +48,7 @@ const dyn = [
   ...['A', 'B', 'C', 'unknown'].map((k) => `ev.level.${k}`),
   ...['done', 'next', 'later'].map((k) => `plan.status.${k}`),
   ...['groups', 'types'].map((k) => `trem.detail.${k}`),
+  ...['manager', 'member', 'inspector', 'auditor'].flatMap((k) => [`role.${k}`, `role.${k}.desc`]),
   ...['unchanged', 'changed', 'dead_standing', 'fallen', 'felled'].map((k) => `mon.cond.${k}`),
   ...['bark', 'leaf', 'habit', 'fruit', 'flower', 'auto'].map((k) => `species.organ.${k}`),
   ...['no_key', 'not_a_plant', 'quota', 'network', 'other'].map((k) => `species.err.${k}`),

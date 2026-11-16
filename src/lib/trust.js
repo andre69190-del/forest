@@ -56,7 +56,7 @@ export async function importPublicJwk(jwk) {
 }
 
 /** Felder, die nicht in die Signatur eingehen (sie entstehen erst durch das Signieren). */
-const UNSIGNED = ['hash', 'signature', 'verify', 'server'];
+const UNSIGNED = ['hash', 'signature', 'verify', 'server', '_sync'];
 export function signedBody(record) {
   const body = {};
   for (const k of Object.keys(record)) if (!UNSIGNED.includes(k)) body[k] = record[k];

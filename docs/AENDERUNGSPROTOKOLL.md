@@ -1,5 +1,36 @@
 # Änderungsprotokoll
 
+## 0.6.0 – 14.11.2026 (Phase 2: Gruppenzertifizierung)
+- Neue Seite Gruppenzertifizierung (#/gruppe, über „Mehr“ und „Erfassen“): Teilnehmer mit Fläche, Region, Risiko (niedrig/normal/hoch)
+- Risikobasierte Stichprobe: Größe ⌈√n⌉ (oder 0,6·√n), Hochrisiko immer dabei, Rest gewichtet zufällig; Startwert wird signiert,
+  jede Ziehung bleibt sichtbar, die App rechnet die Auswahl nach (Auditor kann es ebenso)
+- Offene schwere Abweichung stuft den Teilnehmer automatisch auf „hoch“
+- Interne Prüfung (#/gruppe/pruefung) nach PEFC D 1002-1:2020: 49 Prüfpunkte (0.1–6.11 + Teilnahmepflichten), Schnellmodus
+  „Waldbegang“ mit 17 vor Ort sichtbaren Punkten; erfüllt / nicht erfüllt / n. a., Bemerkung, Standort, Fotos
+- Zweite Checkliste: internationaler Benchmark PEFC ST 1003:2024 (58 Punkte: Abschnitt 8 + Recht/Rechte/Arbeit/Geodaten,
+  Waldbegang 17 Punkte) als Orientierung für Länder ohne eigene Checkliste; Auswahl folgt dem Länderprofil, letzte Wahl wird gemerkt
+- „Nicht erfüllt“ → Abweichung mit Schwere, Feststellung, Korrekturmaßnahme und Frist (Vorschlag 90/30 Tage); Abschluss mit Nachweis und Fotos
+- Gruppenbericht als PDF (Kennzahlen, Stichprobe inkl. Nachrechnung, Abweichungen, Prüfungen, Fingerabdrücke)
+- Demo-Gruppe mit 12 erfundenen Waldbesitzern
+- Neue Sprache Portugiesisch (Brasilien), vollständig (alle 824 Texte, beide Checklisten); wird automatisch erkannt,
+  erst bei Bedarf nachgeladen (Start-Bundle bleibt unter 200 KB gzip); Diktieren auf pt-BR
+- Neue Sprachen Spanisch und Französisch, vollständig; Diktieren auf es-ES / fr-FR
+- Phase 2 damit abgeschlossen (Roadmap-Seite zeigt „fertig“)
+- Info-Seite: Abschnitt Gruppenzertifizierung
+- Neue Nachweis-Arten: participant, sample, inspection, deviation, deviation_closed (alle signiert und synchronisierbar)
+- Unit-Tests 58, Browser-Test 59 Schritte
+
+## 0.5.0 – 14.11.2026 (Phase 1b abgeschlossen: Sync & Gruppen)
+- Konto & Sync (#/konto) über das selbst gehostete Supabase (supabase.arndt-software.de): Anmelden, Konto anlegen, Passwort zurücksetzen
+- Automatischer Abgleich beim Start, beim Wiederverbinden und nach jeder Erfassung; Server-Eingangszeit je Nachweis
+- Gruppen mit Einladungscode und Rollen (Gruppenmanager, Waldbesitzer, interner Prüfer, Auditor); „Neue Nachweise teilen mit …“
+- Nachweise anderer Mitglieder werden vor dem Speichern mit deren öffentlichem Schlüssel geprüft; gefälschte werden verworfen
+- Nachweise: Ansicht „Dieses Gerät / Gruppe“
+- Server-Schema deploy/supabase_forest.sql: Nachweise unveränderlich (keine Update-/Delete-Regeln + Trigger), RLS je Gruppe/Rolle, privater Foto-Bucket
+- Neuer Check checks/sql_check.sh: Schema 2× in Postgres (idempotent) + 10 RLS-Szenarien
+- Unterseiten werden nachgeladen (schnellerer Start); Datenschutz um Konto/Sync ergänzt
+- Unit-Tests 43, Browser-Test 43 Schritte
+
 ## 0.4.0 – 09.11.2026 (Phase 1b, ohne Sync)
 - 47 Mikrohabitat-Typen mit Mindestgrößen (WSL-Feldführer 2020); Umschalter 15 Gruppen / 47 Typen, auch in den Einstellungen
 - KI-Artbestimmung über Pl@ntNet (nur auf Knopfdruck; Schlüssel aus Einstellungen oder Build-Variable VITE_PLANTNET_KEY – nicht im Code)

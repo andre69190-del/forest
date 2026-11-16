@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useI18n } from '../i18n/i18n.jsx';
 import { db, setSetting } from '../lib/db.js';
 import { verifyAll, exportBundle, tamperDemo } from '../lib/evidence.js';
+import { verifyPeers } from '../lib/sync.js';
 import { Card, Notice, PageHeader, TrustBadge, downloadBlob } from '../components/ui.jsx';
 
 function fmt(v) {
@@ -48,13 +49,18 @@ function TamperDemo() {
 export default function Evidence() {
   const { t, date, num } = useI18n();
   const location = useLocation();
-  const records = useLiveQuery(() => db.records.orderBy('seq').reverse().toArray(), [], []);
+  const [view, setView] = useState('device');
+  const all = useLiveQuery(() => db.records.orderBy('seq').reverse().toArray(), [], []);
+  const remoteCount = all.filter((r) => r._sync?.remote).length;
+  const records = all.filter((r) => (view === 'group' ? r._sync?.remote : !r._sync?.remote));
+  const [peerLevels, setPeerLevels] = useState(null);
+  useEffect(() => { if (view === 'group') verifyPeers().then(setPeerLevels); }, [view, remoteCount]);
   const [check, setCheck] = useState(null);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(null);
 
   // Beim Öffnen und nach jedem neuen Nachweis automatisch prüfen
-  useEffect(() => { if (records.length) run(); }, [records.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (view === 'device' && records.length) run(); }, [records.length, view]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (location.hash === '#manipulation') setTimeout(() => document.getElementById('manipulation')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
   }, [location.hash]);
@@ -70,19 +76,25 @@ export default function Evidence() {
     <div className="page">
       <PageHeader title={t('ev.title')} />
       <p className="muted">{t('home.trustNote')}</p>
+      {remoteCount > 0 && (
+        <div className="segmented" role="group">
+          <button type="button" className={view === 'device' ? 'on' : ''} onClick={() => setView('device')}>{t('ev.view.device')}</button>
+          <button type="button" className={view === 'group' ? 'on' : ''} onClick={() => setView('group')}>{t('ev.view.group', { n: remoteCount })}</button>
+        </div>
+      )}
       <div className="row">
         <button type="button" className="btn btn-primary" onClick={run} disabled={busy || !records.length}>{busy ? t('ev.verifying') : t('ev.verify')}</button>
         <button type="button" className="btn" onClick={bundle} disabled={!records.length}>{t('ev.bundle')}</button>
       </div>
       <p className="muted">{t('ev.bundleHint')}</p>
-      {check && (check.chain.ok
+      {view === 'device' && check && (check.chain.ok
         ? <Notice kind="ok">{t('ev.chainOk', { n: check.count })}</Notice>
         : <Notice kind="error">{t('ev.chainBroken', { n: check.chain.breaks.length })}</Notice>)}
-      {records.length > 0 && <TamperDemo />}
+      {view === 'device' && records.length > 0 && <TamperDemo />}
       {records.length === 0 ? <p className="muted">{t('ev.empty')}</p> : (
         <ul className="list">
           {records.map((r) => {
-            const res = check?.results.get(r.id);
+            const res = view === 'group' ? peerLevels?.get(r.id) : check?.results.get(r.id);
             const notes = res ? [...res.problems.map((p) => t(`ev.problem.${p}`)), ...res.warnings.map((w) => t(`ev.warn.${w}`))] : [];
             const isOpen = open === r.id;
             return (
@@ -102,6 +114,7 @@ export default function Evidence() {
                     <dt>{t('ev.hash')}</dt><dd><code className="hash">{r.hash}</code></dd>
                     <dt>{t('ev.prev')}</dt><dd><code className="hash">{r.prevHash.slice(0, 24)}…</code></dd>
                     <dt>{t('ev.device')}</dt><dd><code>{r.deviceKeyId}</code> · {r.platform} · v{r.appVersion}</dd>
+                    {r.server?.timestamp && <><dt>{t('ev.serverTime')}</dt><dd>{date(r.server.timestamp)}</dd></>}
                   </dl>
                 )}
               </li>

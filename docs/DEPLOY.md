@@ -11,6 +11,16 @@ Ablauf: Änderung → `publish.bat` → GitHub → Coolify baut das Docker-Image
    Sonst Webhook: Coolify → Webhooks → GitHub-URL + Secret; GitHub → Settings → Webhooks →
    Payload-URL, `application/json`, Secret, „Just the push event“.
 
+## Sync & Gruppen einrichten (einmalig, ab 0.5.0)
+1. Supabase Studio (supabase.arndt-software.de) → SQL Editor → Inhalt von `deploy/supabase_forest.sql` ausführen.
+   Mehrfaches Ausführen schadet nicht.
+2. Supabase → Authentication → URL Configuration: `https://forest.arndt-software.de` als Redirect-URL ergänzen
+   (für Bestätigungs- und Passwort-Mails).
+3. Coolify → forest → Environment Variables → als **Build-Variable**:
+   `VITE_SUPABASE_ANON_KEY` = der öffentliche anon-Schlüssel (derselbe wie bei Polski Szlak / English Trail).
+   Optional `VITE_SUPABASE_URL` (Standard: https://supabase.arndt-software.de) und `VITE_PLANTNET_KEY`.
+4. Redeploy. Ohne anon-Schlüssel zeigt die App unter „Konto & Sync“ nur einen Hinweis und arbeitet lokal.
+
 ## Jede Änderung
 - `bash checks/run_all.sh` (Git Bash) bzw. mindestens `npm run build` und `npm test`
 - `publish.bat` doppelklicken (baut, testet, committet, pusht)

@@ -11,6 +11,11 @@ db.version(1).stores({
   keys: 'id',
   settings: 'key',
 });
+// v2: Sync – synced (welche eigenen Nachweise sind hochgeladen), peers (öffentliche Schlüssel anderer Geräte)
+db.version(2).stores({
+  synced: 'id',
+  peers: 'keyId',
+});
 
 export async function getSetting(key, fallback = null) {
   const row = await db.settings.get(key);

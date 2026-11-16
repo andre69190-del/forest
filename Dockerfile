@@ -8,6 +8,10 @@ COPY . .
 # Optional: Pl@ntNet-Schlüssel als Build-Variable aus Coolify (landet – wie bei BIOGLOW – im ausgelieferten Code)
 ARG VITE_PLANTNET_KEY=
 ENV VITE_PLANTNET_KEY=$VITE_PLANTNET_KEY
+# Sync (selbst gehostetes Supabase): öffentlicher anon-Schlüssel als Build-Variable aus Coolify
+ARG VITE_SUPABASE_URL=https://supabase.arndt-software.de
+ARG VITE_SUPABASE_ANON_KEY=
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 RUN npm run build && npx vitest run
 
 FROM nginx:alpine

@@ -33,3 +33,13 @@
 | settings | Profil, Erzeuger, Land |
 
 Flächen tragen eine stabile `plotKey`; Bäume und Totholz verweisen über `plotId` darauf.
+
+## Sync & Gruppen (ab 0.5.0)
+
+- Server: selbst gehostetes Supabase, Schema `deploy/supabase_forest.sql` (Tabellen `forest_*`, Bucket `forest-media`).
+- `src/lib/sync.js`: `push` lädt eigene Nachweise **unverändert** hoch (komplettes JSON in `record`), Fotos in den Bucket;
+  `pull` holt Nachweise anderer Geräte, prüft jede Signatur mit dem Schlüssel aus `forest_devices` und speichert nur gültige.
+- Server-Zusatzinfos stehen in nicht signierten Feldern (`server`, `_sync` – in `trust.js` von der Signatur ausgenommen).
+- Unveränderlichkeit doppelt: keine UPDATE/DELETE-Regeln für Inhalte + Trigger; einzig `group_id` darf der Eigentümer setzen.
+- `src/lib/cloud.js`: Adapter zu supabase-js (lazy); Zugangsdaten nur als Build-Variablen.
+- Tabellen lokal (Dexie v2): `synced` (hochgeladene eigene Nachweise), `peers` (öffentliche Schlüssel anderer Geräte).

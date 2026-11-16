@@ -133,3 +133,5 @@ dialog.welcome::backdrop { background: rgba(10, 20, 12, .55); }
 .compare figure { margin: 0; } .compare .photo { aspect-ratio: 1; max-height: none; }
 .compare figcaption { font-size: .85rem; color: var(--muted); margin-top: 4px; }
 .qr { width: 200px; height: 200px; image-rendering: pixelated; background: #fff; padding: 8px; border-radius: 8px; align-self: center; }
+.sync-line { margin: 0; font-size: .9rem; color: var(--muted); }
+.sync-line a { color: var(--primary); font-weight: 600; }

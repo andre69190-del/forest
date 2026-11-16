@@ -1,7 +1,7 @@
 {
   "name": "bioglow-forest",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "BIOGLOW Forest – prüfbare Feldnachweise für zertifizierte Wälder (Arbeitsname: forest)",
   "type": "module",
   "scripts": {
@@ -12,6 +12,7 @@
     "checks": "bash checks/run_all.sh"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "dexie": "^4.0.11",
     "dexie-react-hooks": "^4.4.0",
     "jspdf": "^4.2.1",

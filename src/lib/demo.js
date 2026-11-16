@@ -32,3 +32,28 @@ export async function loadDemoForest() {
     { position: pos(off(10, 10)) });
   return plotKey;
 }
+
+/** Demo-Gruppe für die Gruppenzertifizierung: 12 erfundene Waldbesitzer, eine Prüfung mit Abweichung. */
+export async function loadDemoGroup() {
+  const owners = [
+    ['Demo: Forstbetrieb Lindenhof', 210, 'Walldorf', 'high'], ['Demo: Familie Berger', 12.5, 'Sandhausen', 'low'],
+    ['Demo: Waldgenossenschaft Nußloch', 86, 'Nußloch', 'normal'], ['Demo: Gemeindewald Reilingen', 145, 'Reilingen', 'normal'],
+    ['Demo: A. Schäfer', 4.2, 'Oftersheim', 'low'], ['Demo: Gut Eichwald', 320, 'Hockenheim', 'high'],
+    ['Demo: K. Wagner', 7.8, 'St. Leon-Rot', 'low'], ['Demo: Kirchenwald St. Peter', 54, 'Wiesloch', 'normal'],
+    ['Demo: Erbengemeinschaft Roth', 23, 'Leimen', 'normal'], ['Demo: M. Huber', 2.1, 'Walldorf', 'low'],
+    ['Demo: Stadtwald Schwetzingen', 410, 'Schwetzingen', 'normal'], ['Demo: Forstgut Hardtwald', 98, 'Ketsch', 'normal'],
+  ];
+  const ids = [];
+  for (const [name, areaHa, region, risk] of owners) {
+    const r = await createEvidence('participant', { name, areaHa, region, risk, contact: '', demo: true });
+    ids.push(r.id);
+  }
+  const answers = { '1.2': 'ok', '2.5': 'ok', '2.6': 'ok', '2.7': 'nc', '2.8': 'ok', '3.4': 'ok', '4.1': 'ok', '4.3': 'na', '4.5': 'ok', '4.10': 'ok', '4.11': 'ok', '5.2': 'ok', '5.3': 'ok', '5.4': 'ok', '5.5': 'ok', '6.6': 'ok', '6.11': 'na' };
+  const insp = await createEvidence('inspection', { participantId: ids[0], checklist: 'PEFC_DE_2020', scope: 'field', items: Object.keys(answers), answers, notes: {}, inspector: 'Demo-Prüferin', sampleId: null, demo: true },
+    { position: pos(off(40, -20)) });
+  const due = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
+  await createEvidence('deviation', { inspectionId: insp.id, participantId: ids[0], checklist: 'PEFC_DE_2020', item: '2.7', severity: 'minor',
+    finding: 'Beispiel: Rückeschäden an ca. 15 % der verbleibenden Stämme entlang Gasse 4.', action: 'Beispiel: Einweisung des Rückeunternehmers, Nachkontrolle nach dem nächsten Hieb.', due, demo: true },
+  { position: pos(off(40, -20)) });
+  return ids;
+}

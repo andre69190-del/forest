@@ -5,9 +5,9 @@ import { Card, PageHeader } from '../components/ui.jsx';
 
 const PHASES = [
   { key: '1a', status: 'done', items: ['plot', 'tree', 'deadwood', 'visit', 'trust', 'audit', 'lang', 'meeting'] },
-  { key: '1b', status: 'next', items: ['trems47', 'species', 'monitoring', 'qr', 'auditfolder', 'sync', 'backup'], done: ['trems47', 'species', 'monitoring', 'qr', 'auditfolder'] },
-  { key: '1c', status: 'later', items: ['native', 'attest', 'timestamp', 'store'] },
-  { key: '2', status: 'later', items: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'] },
+  { key: '1b', status: 'done', items: ['trems47', 'species', 'monitoring', 'qr', 'auditfolder', 'sync', 'backup'] },
+  { key: '1c', status: 'next', items: ['native', 'attest', 'timestamp', 'store'] },
+  { key: '2', status: 'done', items: ['roles', 'checklists', 'sampling', 'auditfolder', 'lang1'] },
   { key: '3', status: 'later', items: ['satellite', 'inventory', 'soil', 'tropics', 'lang2'] },
   { key: '4', status: 'later', items: ['citizen', 'dashboard', 'gbif', 'lang3'] },
 ];

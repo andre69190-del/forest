@@ -4,7 +4,7 @@
  */
 import { useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useI18n } from '../i18n/i18n.jsx';
+import { useI18n, SPEECH_LANG } from '../i18n/i18n.jsx';
 import { db } from '../lib/db.js';
 import { createEvidence, latestOnly } from '../lib/evidence.js';
 import { TOPICS, toVCard, followUpMailto, toCsv } from '../lib/contacts.js';
@@ -29,7 +29,7 @@ export default function Meeting() {
     if (!SpeechRecognition) { setMsg({ kind: 'warn', text: t('visit.noSpeech') }); return; }
     if (listening) { rec.current?.stop(); return; }
     const r = new SpeechRecognition();
-    r.lang = lang === 'de' ? 'de-DE' : 'en-GB'; r.continuous = true; r.interimResults = false;
+    r.lang = SPEECH_LANG[lang] || 'en-GB'; r.continuous = true; r.interimResults = false;
     r.onresult = (e) => {
       const text = [...e.results].slice(e.resultIndex).map((x) => x[0].transcript).join(' ');
       setF((o) => ({ ...o, notes: `${o.notes}${o.notes ? ' ' : ''}${text}`.trim() }));

@@ -85,7 +85,7 @@ export default function More() {
       </Card>
 
       <h2 className="section-title">{t('more.data')}</h2>
-      <LinkList items={[['/nachweise', t('ev.bundle'), t('more.backupDesc')]]} />
+      <LinkList items={[['/konto', t('acc.title'), t('acc.short')], ['/nachweise', t('ev.bundle'), t('more.backupDesc')]]} />
       <Card title={t('wipe.title')}>
         <p className="muted">{t('wipe.text')}</p>
         <button type="button" className="btn btn-danger" onClick={async () => {

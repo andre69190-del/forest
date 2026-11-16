@@ -9,6 +9,7 @@ import { useI18n } from '../i18n/i18n.jsx';
 import { Card, Notice } from '../components/ui.jsx';
 import InstallHint from '../components/InstallHint.jsx';
 import { useOnline } from '../App.jsx';
+import { useSync } from '../components/SyncContext.jsx';
 
 const KIND_PATH = {
   plot: (r) => `/flaechen/${r.data.plotKey}`, habitat_tree: (r) => `/baum/${r.id}`, tree_revisit: (r) => `/baum/${r.data.treeId}`,
@@ -18,6 +19,7 @@ const KIND_PATH = {
 export default function Home() {
   const { t, date } = useI18n();
   const online = useOnline();
+  const sync = useSync();
   const nav = useNavigate();
   const [demoBusy, setDemoBusy] = useState(false);
   const lastBackup = useLiveQuery(() => getSetting('lastBackup', null), [], null);
@@ -31,7 +33,8 @@ export default function Home() {
       recent: all.sort((a, b) => b.seq - a.seq).slice(0, 3),
     };
   }, [], { plots: 0, trees: 0, records: 0, visits: 0, recent: [] });
-  const needsBackup = data.records > 0 && (!lastBackup || Date.now() - Date.parse(lastBackup) > 7 * 864e5);
+  const synced = sync.user && sync.lastSync && Date.now() - Date.parse(sync.lastSync) < 7 * 864e5;
+  const needsBackup = !synced && data.records > 0 && (!lastBackup || Date.now() - Date.parse(lastBackup) > 7 * 864e5);
 
   return (
     <div className="page">
@@ -40,7 +43,13 @@ export default function Home() {
         <p>{t('home.intro')}</p>
       </header>
       {!online && <Notice kind="warn">{t('home.offline')}</Notice>}
-      {needsBackup && <Notice kind="warn">{t('home.backup')} <Link to="/nachweise">{t('home.backupLink')}</Link></Notice>}
+      {needsBackup && <Notice kind="warn">{t('home.backup')} <Link to={sync.configured ? '/konto' : '/nachweise'}>{t('home.backupLink')}</Link></Notice>}
+      {sync.user && (
+        <p className="sync-line">
+          {sync.busy ? t('acc.syncing') : sync.lastSync ? t('acc.lastSync', { d: date(sync.lastSync) }) : t('acc.neverSynced')}
+          {sync.pending > 0 && !sync.busy ? ` · ${t('acc.pending', { n: sync.pending })}` : ''} · <Link to="/konto">{t('acc.title')}</Link>
+        </p>
+      )}
 
       <div className="tiles">
         <Link className="tile" to="/erfassen/flaeche">{t('capture.plot')}</Link>

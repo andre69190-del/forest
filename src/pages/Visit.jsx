@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useI18n } from '../i18n/i18n.jsx';
+import { useI18n, SPEECH_LANG } from '../i18n/i18n.jsx';
 import { db } from '../lib/db.js';
 import { createEvidence } from '../lib/evidence.js';
 import { visitPdf } from '../lib/pdf.js';
@@ -26,7 +26,7 @@ export default function Visit() {
     if (!SpeechRecognition) { setMsg({ kind: 'warn', text: t('visit.noSpeech') }); return; }
     if (listening) { rec.current?.stop(); return; }
     const r = new SpeechRecognition();
-    r.lang = lang === 'de' ? 'de-DE' : 'en-GB';
+    r.lang = SPEECH_LANG[lang] || 'en-GB';
     r.interimResults = false; r.continuous = true;
     r.onresult = (e) => {
       const text = [...e.results].slice(e.resultIndex).map((x) => x[0].transcript).join(' ');

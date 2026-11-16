@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, lazy, Suspense, useContext, useEffect, useState } from 'react';
 import { HashRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { I18nProvider, useI18n } from './i18n/i18n.jsx';
 import { getSetting, setSetting } from './lib/db.js';
@@ -8,21 +8,23 @@ import Plots from './pages/Plots.jsx';
 import PlotNew from './pages/PlotNew.jsx';
 import PlotDetail from './pages/PlotDetail.jsx';
 import TreeNew from './pages/TreeNew.jsx';
-import Deadwood from './pages/Deadwood.jsx';
-import Visit from './pages/Visit.jsx';
-import Evidence from './pages/Evidence.jsx';
-import Audit from './pages/Audit.jsx';
-import More from './pages/More.jsx';
-import Info from './pages/Info.jsx';
-import Plan from './pages/Plan.jsx';
+const Deadwood = lazy(() => import('./pages/Deadwood.jsx'));
+const Visit = lazy(() => import('./pages/Visit.jsx'));
+const Evidence = lazy(() => import('./pages/Evidence.jsx'));
+const Audit = lazy(() => import('./pages/Audit.jsx'));
+const More = lazy(() => import('./pages/More.jsx'));
+const Info = lazy(() => import('./pages/Info.jsx'));
+const Plan = lazy(() => import('./pages/Plan.jsx'));
 import Welcome from './components/Welcome.jsx';
-import Meeting from './pages/Meeting.jsx';
-import TreeDetail from './pages/TreeDetail.jsx';
-import Scan from './pages/Scan.jsx';
+const Meeting = lazy(() => import('./pages/Meeting.jsx'));
+const TreeDetail = lazy(() => import('./pages/TreeDetail.jsx'));
+const Scan = lazy(() => import('./pages/Scan.jsx'));
+const Account = lazy(() => import('./pages/Account.jsx'));
+import { SyncProvider } from './components/SyncContext.jsx';
 
 const DEFAULTS = {
   profile: 'INT', producerName: '', producerCountry: '',
-  theme: 'system', gpsAverageSec: 10, tremDetail: 'groups', plantnetKey: '', welcomeDone: false, installHintDone: false,
+  theme: 'system', gpsAverageSec: 10, tremDetail: 'groups', plantnetKey: '', autoSync: true, shareGroupId: null, welcomeDone: false, installHintDone: false,
 };
 const SettingsContext = createContext({ ...DEFAULTS, update: () => {} });
 export const useSettings = () => useContext(SettingsContext);
@@ -66,8 +68,10 @@ export default function App() {
   return (
     <I18nProvider>
       <SettingsProvider>
+        <SyncProvider>
         <HashRouter>
           <main className="app">
+            <Suspense fallback={<p className="muted">…</p>}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/erfassen" element={<Capture />} />
@@ -78,6 +82,7 @@ export default function App() {
               <Route path="/erfassen/gespraech" element={<Meeting />} />
               <Route path="/baum/:id" element={<TreeDetail />} />
               <Route path="/scannen" element={<Scan />} />
+              <Route path="/konto" element={<Account />} />
               <Route path="/flaechen" element={<Plots />} />
               <Route path="/flaechen/:key" element={<PlotDetail />} />
               <Route path="/nachweise" element={<Evidence />} />
@@ -87,10 +92,12 @@ export default function App() {
               <Route path="/geplant" element={<Plan />} />
               <Route path="*" element={<Home />} />
             </Routes>
+            </Suspense>
           </main>
           <Nav />
           <Welcome />
         </HashRouter>
+        </SyncProvider>
       </SettingsProvider>
     </I18nProvider>
   );

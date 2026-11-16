@@ -29,13 +29,13 @@ Kamera und GPS funktionieren nur über HTTPS oder `localhost`. Auf dem Handy dah
 - **Nachweise:** Signaturen + Kette prüfen, Vertrauensstufe A/B/C, Prüf-Paket für Auditoren
 - **Paket prüfen:** Auditor lädt das Paket und rechnet alles im Browser nach – Manipulation wird erkannt
 - **Länderprofile:** International (PEFC ST 1003), Deutschland (PEFC D 1002-1), Förderprogramm KWM
-- **Deutsch + Englisch**, Gerätesprache wird erkannt; offline-fähig (PWA)
+- **Deutsch, Englisch, Portugiesisch (Brasilien), Spanisch, Französisch**, Gerätesprache wird erkannt; offline-fähig (PWA). Neue Sprache: src/i18n/<code>.js mit allen Schlüsseln anlegen und in LANGUAGES (i18n.jsx) mit `load` eintragen – wird erst bei Bedarf geladen
 
 ## Ordner
 
 ```
 src/lib/        Logik ohne Oberfläche (geo, trust, forestry, evidence, db, media, pdf)
-src/pages/      Seiten · src/components/ Bausteine · src/i18n/ Sprachen (de.js, en.js)
+src/pages/      Seiten · src/components/ Bausteine · src/i18n/ Sprachen (de.js, en.js, pt.js, es.js, fr.js)
 src/test/       Unit-Tests (vitest) · tests/ui_test.py Browser-Test (Playwright)
 checks/         Qualitäts-Checks · deploy/ nginx-Config · public/ Rechtstexte, Icons
 docs/           Doku (Start: docs/CLAUDE_SESSION_STARTER.md)

@@ -25,8 +25,9 @@ Mit BIOGLOW Forest erfasst man direkt im Wald Flächengrenzen, Habitatbäume, To
 - Feldbesuch: Ort, Land, Waldtyp, Gesprächspartner, Fotos, Diktieren – und ein einseitiges Fallbeispiel als PDF.
 - Nachweise: Alle Einträge prüfen (Signatur, Fotos, lückenlose Kette) mit Vertrauensstufe; Prüf-Paket für Auditoren exportieren.
 - Paket prüfen: Ein Auditor lädt ein Prüf-Paket und sieht sofort, ob etwas nachträglich verändert wurde.
+- Gruppenzertifizierung: Teilnehmer führen, Stichprobe risikobasiert und nachrechenbar ziehen, interne Prüfung nach PEFC Deutschland (49 Punkte) oder dem internationalen PEFC-Benchmark ST 1003:2024 (58 Punkte), jeweils auch als Waldbegang mit 17 Punkten, Abweichungen mit Frist bis zum Abschluss verfolgen, Gruppenbericht als PDF.
 - Länderprofile: International (PEFC ST 1003:2024), Deutschland (PEFC D 1002-1) und Förderprogramm Klimaangepasstes Waldmanagement mit Zielwerten.
-- Offline, Deutsch und Englisch: Alles funktioniert ohne Netz; die Sprache folgt dem Handy und ist umschaltbar. Exporte: EUDR-GeoJSON, Flächen-Pass, Fallbeispiel, Prüf-Paket.
+- Offline, Deutsch, Englisch, Portugiesisch, Spanisch und Französisch: Alles funktioniert ohne Netz; die Sprache folgt dem Handy und ist umschaltbar. Exporte: EUDR-GeoJSON, Flächen-Pass, Fallbeispiel, Prüf-Paket.
 
 ## Wie der Fälschungsschutz funktioniert
 

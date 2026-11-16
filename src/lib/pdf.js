@@ -165,3 +165,56 @@ export async function auditFolderPdf({ t, num, plot, stats, records, levels, tre
   footer(doc, t, records);
   return doc.output('blob');
 }
+
+/** Gruppenbericht interne Überwachung (Phase 2): Kennzahlen, Stichprobe, Abweichungen, Prüfungen, Fingerabdrücke. */
+export async function groupReportPdf({ t, num, date, records, summary: s, devs, pname }) {
+  const { verifySample } = await import('./group.js');
+  const doc = await newDoc();
+  header(doc, t('grp.report.title'), `${t('grp.title')} · ${new Date().toISOString().slice(0, 10)}`);
+  let y = lines(doc, 42, [
+    [t('grp.participants'), `${s.participants} · ${num(s.areaHa, 1)} ha`],
+    [t('grp.insp.list'), `${s.inspections} · ${s.inspectedParticipants} ${t('grp.stats.participants')}`],
+    [t('grp.dev.title'), `${t('grp.state.open')}: ${s.open} · ${t('grp.state.overdue')}: ${s.overdue} · ${t('grp.state.closed')}: ${s.closed} · ${t('grp.sev.major')}: ${s.major}`],
+    [t('grp.insp.checklist'), [...new Set(records.filter((r) => r.kind === 'inspection').map((r) => r.data.checklist))].map((c) => ({ PEFC_DE_2020: 'PEFC D 1002-1:2020', PEFC_INT_2024: 'PEFC ST 1003:2024' }[c] || c)).join(', ') || '-'],
+  ]);
+  const page = (need = 20) => { if (y > 280 - need) { doc.addPage(); y = 20; } };
+  const title = (txt) => { page(30); y += 4; doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text(txt, 14, y); y += 6; doc.setFontSize(9); doc.setFont(undefined, 'normal'); };
+  const para = (txt, x = 14, w = 182) => { const l = doc.splitTextToSize(String(txt), w); page(5 * l.length); doc.text(l, x, y); y += 4.5 * l.length + 1; };
+
+  if (s.lastSample) {
+    const d = s.lastSample.data;
+    title(t('grp.report.sample'));
+    para(`${t('grp.sample.drawn', { d: date(s.lastSample.createdAt), n: d.selected.length, total: d.population.length })} · ${t('grp.sample.seed')} ${d.seed} · ${t('grp.sample.progress', { done: s.sampleDone, n: s.sampleSize })}`);
+    para(d.selected.map(pname).join(', '));
+    para(verifySample(s.lastSample, d.population) ? t('grp.sample.verifyOk') : t('grp.sample.verifyFail'));
+  }
+
+  title(t('grp.report.devs'));
+  if (!devs.length) para(t('grp.dev.none'));
+  for (const { deviation: d, closed, state } of devs) {
+    page(24);
+    doc.setFont(undefined, 'bold');
+    para(`${d.data.checklist === 'PEFC_INT_2024' ? 'ST 1003 ' : ''}${d.data.item} · ${pname(d.data.participantId)} · ${t(`grp.sev.${d.data.severity}`)} · ${t(`grp.state.${state}`)} · ${closed ? t('grp.dev.closedOn', { d: date(closed.createdAt) }) : t('grp.dev.dueOn', { d: d.data.due || '-' })}`);
+    doc.setFont(undefined, 'normal');
+    if (d.data.finding) para(`${t('grp.dev.finding')}: ${d.data.finding}`, 18, 178);
+    if (d.data.action) para(`${t('grp.dev.action')}: ${d.data.action}`, 18, 178);
+    if (closed?.data.note) para(`${t('grp.dev.closeNote')}: ${closed.data.note}`, 18, 178);
+  }
+
+  title(t('grp.report.insp'));
+  const insps = records.filter((r) => r.kind === 'inspection');
+  if (!insps.length) para(t('grp.insp.none'));
+  for (const i of insps) {
+    const a = Object.values(i.data.answers || {});
+    para(`${date(i.createdAt)} · ${pname(i.data.participantId)} · ${i.data.inspector || '-'} · ${a.filter((x) => x === 'ok').length} ${t('grp.ans.ok')} · ${a.filter((x) => x === 'nc').length} ${t('grp.ans.nc')} · ${a.filter((x) => x === 'na').length} ${t('grp.ans.na')} · ${i.hash.slice(0, 16)}…`);
+  }
+
+  page(60);
+  y += 4;
+  doc.setFontSize(8); doc.setTextColor(90, 90, 90);
+  para(t('grp.report.disclaimer'));
+  doc.setTextColor(20, 20, 20);
+  if (y > 238) doc.addPage();
+  footer(doc, t, records.slice().reverse());
+  return doc.output('blob');
+}

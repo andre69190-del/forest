@@ -5,7 +5,7 @@
 import { db } from './db.js';
 import { createDeviceKey, signRecord, verifyRecord, verifyChain, trustLevel, plausibility, sha256Hex, GENESIS, importPublicJwk } from './trust.js';
 
-export const APP_VERSION = '0.4.0';
+export const APP_VERSION = '0.5.0';
 
 let keyPromise = null;
 /** Geräte-Schlüssel laden oder einmalig erzeugen. */
@@ -54,6 +54,7 @@ export function createEvidence(kind, data, { position = null, photos = [], plotI
     };
     const rec = await signRecord(body, key.privateKey);
     await db.records.put(rec);
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event('forest:record'));
     return rec;
   });
 }
